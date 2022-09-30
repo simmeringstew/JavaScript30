@@ -59,6 +59,30 @@
 
 <script>
 
+  // functioin for playing the sound
+  function playSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`); // selects the data-key associated with the key that is pressed
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`); // selects the div associated with the key that is pressed
+    if(!audio) return; // ends the function is a key that is not a drum is pressed
+    audio.currentTime = 0; // rewinds the audio so that you can press it over and over
+    audio.play(); // plays the audio associated with the key
+    key.classList.add("playing"); // adds the playing class to the key which is in the stylesheet to apply what is there
+  }
+
+  // creating the function for removing the transition
+  function removeTransition(e) {
+    if (e.propertyName !== "transform") return; // are many diffrent transitions happening we are looking for one in specific and returning if it is not that one
+    this.classList.remove("playing"); // this is what got called against, so since this was called by addEventListener, this is key
+  }
+
+  // checks to see if keys have a transition complete, so when they are done growing in size and getting the yellow border
+  const keys = document.querySelectorAll(".key");
+  keys.forEach(key => {
+    key.addEventListener("transitionend", removeTransition);
+  });
+
+  window.addEventListener("keydown", playSound) // listens for keypresses
+
 </script>
 
 
